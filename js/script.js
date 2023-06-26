@@ -1,54 +1,57 @@
 $(document).ready(function() {
-    var searchTerm = "hoshino_ruby"; // Search term with tags and rating
-    var url = "https://danbooru.donmai.us/posts.json?rating=g&tags=" + encodeURIComponent(searchTerm) + "+" + encodeURIComponent("solo");
-  
-    $.getJSON(url, function(data) {
-      if (data.length > 0) {
-        var rubyimageContainer = $("#rubyimageContainer");
-        var imageWrapper = $("<div>").addClass("image_wrapper"); // Create a new wrapper element
-        rubyimageContainer.append(imageWrapper); // Append the wrapper to the container
-  
-        // Shuffle the array of data using Fisher-Yates algorithm
-        for (var i = data.length - 1; i > 0; i--) {
-          var j = Math.floor(Math.random() * (i + 1));
-          var temp = data[i];
-          data[i] = data[j];
-          data[j] = temp;
-        }
-  
-        // Display a random selection of images
-        var imagesToShow = Math.min(data.length, 100);
-        var loadedImages = 0;
-  
-        for (var i = 0; i < imagesToShow; i++) {
-          var image = $("<img>").addClass("image").attr("src", data[i].file_url).on("load", function() {
-            loadedImages++;
-            if (loadedImages === imagesToShow) {
-              var containerWidth = rubyimageContainer.width();
-              var scrollWidth = imageWrapper.outerWidth();
-              var windowInnerHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
-  
-              rubyimageContainer.scrollLeft((scrollWidth - containerWidth) / 2);
-  
-              // Set the maximum height of the images relative to the window's inner height
-              imageWrapper.find(".image").css("max-height", windowInnerHeight-100 + "px");
-  
-              // Start scrolling immediately after images are loaded
-              setInterval(function() {
-                rubyimageContainer.animate({ scrollLeft: "+=500" }, 2000);
-              }, 3500);
-            }
-          });
-  
-          imageWrapper.append(image);
-        }
-      } else {
-        alert("No images found for the search term: " + searchTerm);
+  var searchTerm = "hoshino_ruby"; // Search term with tags and rating
+  var url = "https://danbooru.donmai.us/posts.json?tags=" + encodeURIComponent(searchTerm) + "+rating:" + encodeURIComponent("g");
+
+  $.getJSON(url, function(data) {
+    if (data.length > 0) {
+      var rubyimageContainer = $("#rubyimageContainer");
+      var imageWrapper = $("<div>").addClass("image_wrapper"); // Create a new wrapper element
+      rubyimageContainer.append(imageWrapper); // Append the wrapper to the container
+
+      // Shuffle the array of data using Fisher-Yates algorithm
+      for (var i = data.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var temp = data[i];
+        data[i] = data[j];
+        data[j] = temp;
       }
-    }).fail(function() {
-      alert("Failed to fetch images. Please try again later.");
-    });
+
+      // Display a random selection of images
+      var imagesToShow = Math.min(data.length, 50);
+      var loadedImages = 0;
+
+      for (var i = 0; i < imagesToShow; i++) {
+        var image = $("<img>").addClass("image").attr("src", data[i].file_url).on("load", function() {
+          loadedImages++;
+          if (loadedImages === imagesToShow) {
+            var containerWidth = rubyimageContainer.width();
+            var scrollWidth = imageWrapper.outerWidth();
+            var windowInnerHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+
+            rubyimageContainer.scrollLeft((scrollWidth - containerWidth) / 2);
+
+            // Set the maximum height of the images relative to the window's inner height
+            imageWrapper.find(".image").css("max-height", windowInnerHeight + "px");
+
+            // Start scrolling immediately after images are loaded
+            rubyimageContainer.animate({ scrollLeft: "+=500" }, 2000);
+
+            setInterval(function() {
+              rubyimageContainer.animate({ scrollLeft: "+=500" }, 2000);
+            }, 3500);
+          }
+        });
+
+        imageWrapper.append(image);
+      }
+    } else {
+      alert("No images found for the search term: " + searchTerm);
+    }
+  }).fail(function() {
+    alert("Failed to fetch images. Please try again later.");
   });
+});
+
   
   function horizontalLoop(items, config) {
     items = gsap.utils.toArray(items);
