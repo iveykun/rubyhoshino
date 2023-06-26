@@ -66,8 +66,12 @@ h1 {
 
 .image {
     max-width: 100%;
+    max-height: none;
+    width: auto;
+    height: auto;
     object-fit: contain;
     display: block;
+    margin: 0 auto;
     cursor: pointer;
 }
 

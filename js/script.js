@@ -34,10 +34,7 @@ $(document).ready(function() {
                             imageWrapper.width(scrollWidth);
                             rubyimageContainer.scrollLeft((scrollWidth - containerWidth) / 2);
                             imageWrapper.find(".image").css("max-height", windowInnerHeight - 100 + "px");
-                            // Add button to each image
-                            imageWrapper.find(".image").each(function() {
-                                addOpenButtonToImage($(this));
-                            });
+
                             // Restore the scroll position
                             rubyimageContainer.scrollLeft(scrollPosition);
                         }
@@ -74,15 +71,14 @@ $(document).ready(function() {
                                             duration: 1000,
                                         });
                                     }
-                                    requestAnimationFrame(animateScroll);
+                                    // Delay before starting the next animation cycle
+                                    setTimeout(function() {
+                                        requestAnimationFrame(animateScroll);
+                                    }, 1000); // Adjust the delay as needed
                                 }
                             });
                         }
 
-                        // Stop autoscrolling
-                        function stopAutoscroll() {
-                            isAutoscrolling = false;
-                        }
 
                         // Call the function initially
                         handleUIUpdates(rubyimageContainer.scrollLeft());
@@ -122,38 +118,19 @@ $(document).ready(function() {
                         // Click event handler for images
                         imageWrapper.on("click", ".image", function() {
                             if ($('.vertical-bar-behind').hasClass('hidden')) {
-                                // moved to button code 
+                                var index = $(this).index(".image");
+                                var postId = data[index].id;
+                                var postUrl = "https://danbooru.donmai.us/posts/" + postId;
+                                window.open(postUrl, "_blank");
+
                             } else {
                                 // remove overlay '
                                 removeOverlay();
                             }
                         });
 
-                        // Function to pause autoscroll
-                        function pauseAutoscroll() {
-                            if (isAutoscrolling) {
-                                stopAutoscroll();
-                            }
-                        }
 
-                        // Function to resume autoscroll with a delay
-                        function resumeAutoscrollWithDelay(delay) {
-                            setTimeout(function() {
-                                startAutoscroll();
-                            }, delay);
-                        }
-                        // Add button to each image
-                        function addOpenButtonToImage(image) {
-                            var button = $("<button>").addClass("open-button").text("Open");
-                            image.parent().append(button);
 
-                            button.on("click", function(e) {
-                                e.stopPropagation();
-                                var postId = data[image.index()].id;
-                                var postUrl = "https://danbooru.donmai.us/posts/" + postId;
-                                window.open(postUrl, "_blank");
-                            });
-                        }
 
                     }
                 });
@@ -171,5 +148,17 @@ $(document).ready(function() {
 
         $('.overlay').stop().animate({ height: "0" }, 200);
         $('.vertical-bar-behind').addClass('hidden');
+    }
+    // Add button to each image
+    function addOpenButtonToImage(image) {
+        var button = $("<button>").addClass("open-button").text("Open");
+        image.parent().append(button);
+
+        button.on("click", function(e) {
+            e.stopPropagation();
+            var postId = data[image.index()].id;
+            var postUrl = "https://danbooru.donmai.us/posts/" + postId;
+            window.open(postUrl, "_blank");
+        });
     }
 });
