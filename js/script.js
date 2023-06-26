@@ -34,7 +34,7 @@ $(document).ready(function() {
             imageWrapper.find(".image").css("max-height", windowInnerHeight + "px");
 
             // Start scrolling immediately after images are loaded
-            rubyimageContainer.animate({ scrollLeft: "+=500" }, 2000);
+            rubyimageContainer.animate({ scrollLeft: "+=300" }, 3000);
 
             setInterval(function() {
               rubyimageContainer.animate({ scrollLeft: "+=500" }, 2000);
