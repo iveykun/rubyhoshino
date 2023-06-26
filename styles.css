@@ -1,8 +1,10 @@
-html, body {
+html,
+body {
     height: 90vh;
     margin: 0;
     padding: 0;
-    scroll-behavior: smooth;
+    overflow: hidden;
+    /* Hide scrollbars on body */
 }
 
 h1 {
@@ -11,22 +13,33 @@ h1 {
 
 .wrapper {
     position: relative;
-    overflow: hidden;
+    overflow-x: scroll;
     height: 100vh;
 }
-#rubyimageContainer {
 
+#rubyimageContainer {
     width: 100%;
     overflow-x: scroll;
 }
+
 .rubyimageContainer {
     width: 100%;
     height: 100vh;
     overflow-x: scroll;
 }
 
-.rubyimageContainer::-webkit-scrollbar {
+.rubyimageContainer .wrapper::-webkit-scrollbar {
     display: none;
+}
+
+
+/* Hide scrollbar for IE, Edge and Firefox */
+
+.rubyimageContainer .wrapper {
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
 }
 
 .imageContainer {
@@ -35,37 +48,44 @@ h1 {
     gap: 25px;
     width: 200%;
     overflow-x: scroll;
+    justify-content: center;
+    align-items: center;
 }
 
 .image_wrapper {
     display: flex;
-  }
+}
+
 .image_wrapper .image {
     flex-shrink: 0;
     width: auto;
     height: 100%;
     margin-right: 0px;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
 }
+
 .image {
     max-width: 100%;
     object-fit: contain;
     display: block;
 }
-.wrapper{
-    overflow: hidden;
-}
+
 .overlay {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%; 
+    height: 100%;
     background: rgba(255, 241, 241, 0.5);
     z-index: 2;
     pointer-events: none;
     transition: height 0.5s ease;
-  }
-  .overlay.hidden {
-    opacity: 0;
 }
-  
+
+.overlay.hidden {
+    height: 0;
+    transition: height 0.5s ease;
+    pointer-events: none;
+}
