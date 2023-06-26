@@ -15,9 +15,20 @@
     <link rel="stylesheet" type="text/css" href="styles.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="js/script.js"></script>
+    <script>
+        function openReddit() {
+            var redditUrl = "https://www.reddit.com/r/ChurchOfRubyHoshino/";
+            window.open(redditUrl, "_blank");
+        }
+    </script>
 </head>
 
 <body>
+    <div class="social-buttons-container">
+        <!-- <button class="social-button discord" href="">Discord</button> -->
+        <button class="social-button reddit" onclick="openReddit()">Reddit</button>
+    </div>
+
     <div class="vertical-bar-behind"></div>
     <div class="header">
         <h1>Church of Ruby Hoshino</h1>
@@ -30,7 +41,7 @@
 
             <div class="overlay">
                 <div class="vertical-bar">
-
+                    <div class="touch-to-unlock">Unveil the greatest IDOL</div>
                     <div class="made-by">made by iveykun</div>
                 </div>
             </div>

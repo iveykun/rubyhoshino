@@ -149,16 +149,6 @@ $(document).ready(function() {
         $('.overlay').stop().animate({ height: "0" }, 200);
         $('.vertical-bar-behind').addClass('hidden');
     }
-    // Add button to each image
-    function addOpenButtonToImage(image) {
-        var button = $("<button>").addClass("open-button").text("Open");
-        image.parent().append(button);
 
-        button.on("click", function(e) {
-            e.stopPropagation();
-            var postId = data[image.index()].id;
-            var postUrl = "https://danbooru.donmai.us/posts/" + postId;
-            window.open(postUrl, "_blank");
-        });
-    }
+
 });
