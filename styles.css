@@ -1,52 +1,161 @@
-html, body {
-    height: 100%;
+html,
+body {
+    height: 90vh;
     margin: 0;
     padding: 0;
-    scroll-behavior: smooth;
+    overflow: hidden;
+    background-color: #ef8bb0;
 }
 
 h1 {
     text-align: center;
+    font-size: 5vh;
+    color: #ffffff;
+    transition: font-size 0.2s cubic-bezier(1, 0, 0, 1);
 }
 
-#rubyimageContainer {
-
-    width: 100%;
+.wrapper {
+    position: relative;
     overflow-x: scroll;
+    height: 105vh;
 }
 
-/* Hide scrollbar for Chrome, Safari and Opera */
-.rubyimageContainer::-webkit-scrollbar {
-    display: none;
-  }
-  
-  /* Hide scrollbar for IE, Edge and Firefox */
 .rubyimageContainer {
--ms-overflow-style: none;  /* IE and Edge */
-scrollbar-width: none;  /* Firefox */
+    width: 100%;
+    height: 100vh;
+    overflow-x: scroll;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.rubyimageContainer .wrapper::-webkit-scrollbar {
+    display: none;
+}
+
+
+/* Hide scrollbar for IE, Edge and Firefox */
+
+.rubyimageContainer .wrapper {
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+}
+
+.imageContainer {
+    display: flex;
+    flex-direction: row;
+    gap: 25px;
+    width: 200%;
+    overflow-x: hidden;
+    justify-content: center;
+    align-items: center;
 }
 
 .image_wrapper {
     display: flex;
-  }
+    align-items: center;
+    justify-content: center;
+}
+
 .image_wrapper .image {
     flex-shrink: 0;
     width: auto;
     height: 100%;
-    margin-right: 10px; /* Adjust the spacing between images as desired */
+    margin-right: 0px;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
 }
+
 .image {
     max-width: 100%;
     object-fit: contain;
     display: block;
 }
-.wrapper{
-    overflow: hidden;
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 241, 241, 0.5);
+    z-index: 2;
+    pointer-events: none;
+    transition: height 0.5s ease;
 }
-.imageContainer{
-    display: flex;
-    flex-direction: row;
-    gap: 25px;
-    width: 200%;
-  }
-  
+
+.overlay.hidden {
+    height: 0;
+    transition: height 0.5s ease;
+    pointer-events: none;
+}
+
+.made-by {
+    position: absolute;
+    bottom: 27vh;
+    left: 50%;
+    /* Center horizontally */
+    transform: translateX(-50%);
+    /* Adjust to center the text */
+    font-size: 24px;
+    font-weight: bold;
+    font-family: Harrington;
+    color: #E0115F;
+}
+
+.vertical-bar {
+    position: absolute;
+    top: 0;
+    left: 5vh;
+    width: 20vh;
+    /* Adjust the width as desired */
+    height: 100%;
+    background-color: white;
+    align-items: center;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    transition: width 0.3s cubic-bezier(1, 0, 0, 1);
+}
+
+.vertical-bar-behind {
+    position: absolute;
+    top: 0;
+    left: 5vh;
+    width: 20vh;
+    height: 100%;
+    background-color: white;
+    align-items: center;
+    transition: height 0.5s ease, width 0.3s cubic-bezier(1, 0, 0, 1);
+    ;
+}
+
+.vertical-bar-behind.hidden {
+    position: absolute;
+    top: 0;
+    left: 5vh;
+    width: 20vh;
+    background-color: white;
+    align-items: center;
+    height: 15vh;
+    transition: height 0.5s ease, width 0.3s cubic-bezier(1, 0, 0, 1);
+    ;
+}
+
+
+/* Adjust the font size for smaller screens */
+
+@media (max-width: 1368px) {
+    h1 {
+        font-size: 2vh;
+        transition: font-size 0.2s cubic-bezier(1, 0, 0, 1);
+    }
+    .vertical-bar {
+        width: 10vh;
+        transition: width 0.3s cubic-bezier(1, 0, 0, 1);
+    }
+    .vertical-bar-behind.hidden,
+    .vertical-bar-behind {
+        width: 10vh;
+        transition: height 0.5s ease, width 0.3s cubic-bezier(1, 0, 0, 1);
+    }
+}
