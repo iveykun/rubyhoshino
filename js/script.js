@@ -47,22 +47,26 @@ $(document).ready(function() {
                         // Start scrolling after images are loaded
                         // Initialize counter
                         var scrollCounter = 0;
+                        var autoscrollInterval;
 
-                        setInterval(function() {
-                            rubyimageContainer.animate({ scrollLeft: "+=500" }, {
-                                duration: 2000,
-                                complete: function() {
-                                    scrollCounter++; // Increment the scroll counter
-                                    if (scrollCounter === imagesToShow + 1) {
-                                        scrollCounter = 0; // Reset the scroll counter
-                                        // Smoothly scroll back to the beginning
-                                        rubyimageContainer.animate({ scrollLeft: "0" }, {
-                                            duration: 1000,
-                                        });
+                        function startAutoscroll() {
+                            autoscrollInterval = setInterval(function() {
+                                rubyimageContainer.animate({ scrollLeft: "+=500" }, {
+                                    duration: 2000,
+                                    complete: function() {
+                                        scrollCounter++;
+                                        if (scrollCounter === imagesToShow + 1) {
+                                            scrollCounter = 0;
+                                            rubyimageContainer.animate({ scrollLeft: "0" }, {
+                                                duration: 1000,
+                                            });
+                                        }
                                     }
-                                }
-                            });
-                        }, 3500); // wait time
+                                });
+                            }, 3500);
+                        }
+
+                        startAutoscroll();
                         // move overlay
                         var isScrolling = false;
 
@@ -86,6 +90,84 @@ $(document).ready(function() {
                             }
                         });
 
+                        // Dragging variables
+                        var isDragging = false;
+                        var startPosX = 0;
+                        var currentPosX = 0;
+                        var scrollLeft = 0;
+
+                        // Mouse events for dragging overlay
+                        $(document).on('mousedown', function(event) {
+                            if ($('.overlay').hasClass('hidden')) {
+                                return;
+                            }
+                            event.preventDefault();
+                            isDragging = true;
+                            startPosX = event.pageX;
+                            scrollLeft = rubyimageContainer.scrollLeft();
+                            pauseAutoscroll();
+                        });
+
+                        $(document).on('mousemove', function(event) {
+                            if (isDragging) {
+                                event.preventDefault();
+                                currentPosX = event.pageX;
+                                var moveX = startPosX - currentPosX;
+                                rubyimageContainer.scrollLeft(scrollLeft + moveX);
+                            }
+                        });
+
+                        $(document).on('mouseup', function(event) {
+                            if (isDragging) {
+                                isDragging = false;
+                                resumeAutoscrollWithDelay(2000); // Delay in milliseconds before resuming autoscroll
+                            }
+                        });
+
+                        // Touch events for dragging overlay on mobile devices
+                        $(document).on('touchstart', function(event) {
+                            if ($('.overlay').hasClass('hidden')) {
+                                return;
+                            }
+                            event.preventDefault();
+                            isDragging = true;
+                            startPosX = event.originalEvent.touches[0].pageX;
+                            scrollLeft = rubyimageContainer.scrollLeft();
+                            pauseAutoscroll();
+                        });
+
+                        $(document).on('touchmove', function(event) {
+                            if (isDragging) {
+                                event.preventDefault();
+                                currentPosX = event.originalEvent.touches[0].pageX;
+                                var moveX = startPosX - currentPosX;
+                                rubyimageContainer.scrollLeft(scrollLeft + moveX);
+                            }
+                        });
+
+                        $(document).on('touchend', function(event) {
+                            if (isDragging) {
+                                isDragging = false;
+                                resumeAutoscrollWithDelay(2000); // Delay in milliseconds before resuming autoscroll
+                            }
+                        });
+
+                        // Function to pause autoscroll
+                        function pauseAutoscroll() {
+                            clearInterval(autoscrollInterval);
+                        }
+
+                        // Function to resume autoscroll with a delay
+                        function resumeAutoscrollWithDelay(delay) {
+                            setTimeout(function() {
+                                startAutoscroll();
+                            }, delay);
+                        }
+
+                        // Function to interrupt autoscroll
+                        function interruptAutoscroll() {
+                            clearInterval(autoscrollInterval);
+                        }
                     }
                 });
 
