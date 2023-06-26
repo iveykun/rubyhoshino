@@ -48,6 +48,7 @@ $(document).ready(function() {
                         // Initialize counter
                         var scrollCounter = 0;
                         var autoscrollInterval;
+                        var isAutoscrolling = false;
 
                         function startAutoscroll() {
                             autoscrollInterval = setInterval(function() {
@@ -64,6 +65,12 @@ $(document).ready(function() {
                                     }
                                 });
                             }, 3500);
+                            isAutoscrolling = true;
+                        }
+
+                        function stopAutoscroll() {
+                            clearInterval(autoscrollInterval);
+                            isAutoscrolling = false;
                         }
 
                         startAutoscroll();
@@ -154,7 +161,9 @@ $(document).ready(function() {
 
                         // Function to pause autoscroll
                         function pauseAutoscroll() {
-                            clearInterval(autoscrollInterval);
+                            if (isAutoscrolling) {
+                                stopAutoscroll();
+                            }
                         }
 
                         // Function to resume autoscroll with a delay
@@ -164,10 +173,6 @@ $(document).ready(function() {
                             }, delay);
                         }
 
-                        // Function to interrupt autoscroll
-                        function interruptAutoscroll() {
-                            clearInterval(autoscrollInterval);
-                        }
                     }
                 });
 
