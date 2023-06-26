@@ -25,22 +25,26 @@ $(document).ready(function() {
                 var image = $("<img>").addClass("image").attr("src", data[i].file_url).on("load", function() {
                     loadedImages++;
                     if (loadedImages === imagesToShow) {
-                        var containerWidth = rubyimageContainer.width();
-                        var scrollWidth = imageWrapper.outerWidth();
-                        var windowInnerHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+                        // Function to handle UI updates
+                        function handleUIUpdates(scrollPosition) {
+                            var containerWidth = rubyimageContainer.width();
+                            var scrollWidth = imageWrapper.outerWidth();
+                            var windowInnerHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
 
-                        // Set the wrapper width to accommodate all images
-                        imageWrapper.width(scrollWidth);
-
-                        rubyimageContainer.scrollLeft((scrollWidth - containerWidth) / 2);
-
-                        // Set the maximum height of the images relative to the window's inner height
-                        imageWrapper.find(".image").css("max-height", windowInnerHeight - 100 + "px");
-
-                        // Start scrolling immediately after images are loaded
-                        rubyimageContainer.animate({ scrollLeft: "+=300" }, 3000);
-
-                        // Start scrolling immediately after images are loaded
+                            imageWrapper.width(scrollWidth);
+                            rubyimageContainer.scrollLeft((scrollWidth - containerWidth) / 2);
+                            imageWrapper.find(".image").css("max-height", windowInnerHeight - 100 + "px");
+                            // Restore the scroll position
+                            rubyimageContainer.scrollLeft(scrollPosition);
+                        }
+                        // Call the function initially
+                        handleUIUpdates(rubyimageContainer.scrollLeft());
+                        // Handle window resize event
+                        $(window).on("resize", function() {
+                            var scrollPosition = rubyimageContainer.scrollLeft();
+                            handleUIUpdates(scrollPosition);
+                        });
+                        // Start scrolling after images are loaded
                         // Initialize counter
                         var scrollCounter = 0;
 
@@ -60,15 +64,28 @@ $(document).ready(function() {
                             });
                         }, 3500); // wait time
                         // move overlay
-                        var lastScrollTop = 0;
-                        $('.wrapper').on('scroll', function() {
-                            var scrollTop = $(this).scrollTop();
-                            if (scrollTop > lastScrollTop) {
-                                $('.overlay').stop().animate({ height: "0" }, 200);
-                            } else {
-                                $('.overlay').stop().animate({ height: "100vh" }, 200);
+                        var isScrolling = false;
+
+                        $('.wrapper').on('wheel', function(event) {
+                            if (!isScrolling) {
+                                isScrolling = true;
+                                if (event.originalEvent.deltaY > 0) {
+                                    $('.overlay').stop().animate({ height: "0" }, 200);
+                                    $('.vertical-bar-behind').addClass('hidden');
+                                } else {
+                                    $('.overlay').stop().animate({ height: "100vh" }, 200);
+                                    // 1 second delay
+                                    setTimeout(function() {
+                                        $('.vertical-bar-behind').removeClass('hidden');
+                                    }, 200);
+
+                                }
+                                setTimeout(function() {
+                                    isScrolling = false;
+                                }, 200); // Adjust the delay as needed
                             }
                         });
+
                     }
                 });
 
