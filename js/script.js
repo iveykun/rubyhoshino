@@ -47,26 +47,51 @@ $(document).ready(function() {
                         // Start scrolling after images are loaded
                         // Initialize counter
                         var scrollCounter = 0;
-                        var autoscrollInterval;
-
+                        var isAutoscrolling = false;
+                        // Start scrolling after images are loaded
                         function startAutoscroll() {
-                            autoscrollInterval = setInterval(function() {
-                                rubyimageContainer.animate({ scrollLeft: "+=500" }, {
-                                    duration: 2000,
-                                    complete: function() {
-                                        scrollCounter++;
-                                        if (scrollCounter === imagesToShow + 1) {
-                                            scrollCounter = 0;
-                                            rubyimageContainer.animate({ scrollLeft: "0" }, {
-                                                duration: 1000,
-                                            });
-                                        }
-                                    }
-                                });
-                            }, 3500);
+                            isAutoscrolling = true;
+                            animateScroll();
                         }
 
+                        // Animation loop for scrolling
+                        function animateScroll() {
+                            if (!isAutoscrolling) {
+                                return;
+                            }
+
+                            rubyimageContainer.animate({ scrollLeft: "+=500" }, {
+                                duration: 2000,
+                                complete: function() {
+                                    scrollCounter++;
+                                    if (scrollCounter === imagesToShow + 1) {
+                                        scrollCounter = 0;
+                                        rubyimageContainer.animate({ scrollLeft: "0" }, {
+                                            duration: 1000,
+                                        });
+                                    }
+                                    requestAnimationFrame(animateScroll);
+                                }
+                            });
+                        }
+
+                        // Stop autoscrolling
+                        function stopAutoscroll() {
+                            isAutoscrolling = false;
+                        }
+
+                        // Call the function initially
+                        handleUIUpdates(rubyimageContainer.scrollLeft());
+
+                        // Handle window resize event
+                        $(window).on("resize", function() {
+                            var scrollPosition = rubyimageContainer.scrollLeft();
+                            handleUIUpdates(scrollPosition);
+                        });
+
+                        // Start autoscrolling
                         startAutoscroll();
+
                         // move overlay
                         var isScrolling = false;
 
@@ -74,8 +99,7 @@ $(document).ready(function() {
                             if (!isScrolling) {
                                 isScrolling = true;
                                 if (event.originalEvent.deltaY > 0) {
-                                    $('.overlay').stop().animate({ height: "0" }, 200);
-                                    $('.vertical-bar-behind').addClass('hidden');
+                                    removeOverlay();
                                 } else {
                                     $('.overlay').stop().animate({ height: "100vh" }, 200);
                                     // 1 second delay
@@ -151,10 +175,23 @@ $(document).ready(function() {
                                 resumeAutoscrollWithDelay(2000); // Delay in milliseconds before resuming autoscroll
                             }
                         });
+                        // Click event handler for images
+                        imageWrapper.on("click", ".image", function() {
+                            if ($('.vertical-bar-behind').hasClass('hidden')) {
+                                var postId = data[$(this).index()].id;
+                                var postUrl = "https://danbooru.donmai.us/posts/" + postId;
+                                window.open(postUrl, "_blank");
+                            } else {
+                                // remove overlay '
+                                removeOverlay();
+                            }
+                        });
 
                         // Function to pause autoscroll
                         function pauseAutoscroll() {
-                            clearInterval(autoscrollInterval);
+                            if (isAutoscrolling) {
+                                stopAutoscroll();
+                            }
                         }
 
                         // Function to resume autoscroll with a delay
@@ -164,10 +201,6 @@ $(document).ready(function() {
                             }, delay);
                         }
 
-                        // Function to interrupt autoscroll
-                        function interruptAutoscroll() {
-                            clearInterval(autoscrollInterval);
-                        }
                     }
                 });
 
@@ -179,4 +212,10 @@ $(document).ready(function() {
     }).fail(function() {
         alert("Failed to fetch images. Please try again later.");
     });
+
+    function removeOverlay() {
+
+        $('.overlay').stop().animate({ height: "0" }, 200);
+        $('.vertical-bar-behind').addClass('hidden');
+    }
 });
