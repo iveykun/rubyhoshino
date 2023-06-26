@@ -17,7 +17,8 @@ $(document).ready(function() {
       }
 
       // Display a random selection of images
-      var imagesToShow = Math.min(data.length, 50);
+      var amount_of_pics = 50;
+      var imagesToShow = Math.min(data.length, amount_of_pics);
       var loadedImages = 0;
 
       for (var i = 0; i < imagesToShow; i++) {
@@ -36,9 +37,25 @@ $(document).ready(function() {
             // Start scrolling immediately after images are loaded
             rubyimageContainer.animate({ scrollLeft: "+=300" }, 3000);
 
+            // Start scrolling immediately after images are loaded
+            // Initialize counter
+            var scrollCounter = 0;
+
             setInterval(function() {
-              rubyimageContainer.animate({ scrollLeft: "+=500" }, 2000);
-            }, 3500);
+                rubyimageContainer.animate({ scrollLeft: "+=500" }, {
+                    duration: 2000,
+                    complete: function() {
+                        scrollCounter++; // Increment the scroll counter
+                        if (scrollCounter === amount_of_pics+1) {
+                            scrollCounter = 0; // Reset the scroll counter
+                            // Smoothly scroll back to the beginning
+                            rubyimageContainer.animate({ scrollLeft: "0" }, {
+                                duration: 1000,
+                            });
+                        }
+                    }
+                });
+            }, 3500); // wait time
           }
         });
 
