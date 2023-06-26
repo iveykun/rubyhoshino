@@ -34,6 +34,10 @@ $(document).ready(function() {
                             imageWrapper.width(scrollWidth);
                             rubyimageContainer.scrollLeft((scrollWidth - containerWidth) / 2);
                             imageWrapper.find(".image").css("max-height", windowInnerHeight - 100 + "px");
+                            // Add button to each image
+                            imageWrapper.find(".image").each(function() {
+                                addOpenButtonToImage($(this));
+                            });
                             // Restore the scroll position
                             rubyimageContainer.scrollLeft(scrollPosition);
                         }
@@ -114,73 +118,11 @@ $(document).ready(function() {
                             }
                         });
 
-                        // Dragging variables
-                        var isDragging = false;
-                        var startPosX = 0;
-                        var currentPosX = 0;
-                        var scrollLeft = 0;
 
-                        // Mouse events for dragging overlay
-                        $(document).on('mousedown', function(event) {
-                            if ($('.overlay').hasClass('hidden')) {
-                                return;
-                            }
-                            event.preventDefault();
-                            isDragging = true;
-                            startPosX = event.pageX;
-                            scrollLeft = rubyimageContainer.scrollLeft();
-                            pauseAutoscroll();
-                        });
-
-                        $(document).on('mousemove', function(event) {
-                            if (isDragging) {
-                                event.preventDefault();
-                                currentPosX = event.pageX;
-                                var moveX = startPosX - currentPosX;
-                                rubyimageContainer.scrollLeft(scrollLeft + moveX);
-                            }
-                        });
-
-                        $(document).on('mouseup', function(event) {
-                            if (isDragging) {
-                                isDragging = false;
-                                resumeAutoscrollWithDelay(2000); // Delay in milliseconds before resuming autoscroll
-                            }
-                        });
-
-                        // Touch events for dragging overlay on mobile devices
-                        $(document).on('touchstart', function(event) {
-                            if ($('.overlay').hasClass('hidden')) {
-                                return;
-                            }
-                            event.preventDefault();
-                            isDragging = true;
-                            startPosX = event.originalEvent.touches[0].pageX;
-                            scrollLeft = rubyimageContainer.scrollLeft();
-                            pauseAutoscroll();
-                        });
-
-                        $(document).on('touchmove', function(event) {
-                            if (isDragging) {
-                                event.preventDefault();
-                                currentPosX = event.originalEvent.touches[0].pageX;
-                                var moveX = startPosX - currentPosX;
-                                rubyimageContainer.scrollLeft(scrollLeft + moveX);
-                            }
-                        });
-
-                        $(document).on('touchend', function(event) {
-                            if (isDragging) {
-                                isDragging = false;
-                                resumeAutoscrollWithDelay(2000); // Delay in milliseconds before resuming autoscroll
-                            }
-                        });
                         // Click event handler for images
                         imageWrapper.on("click", ".image", function() {
                             if ($('.vertical-bar-behind').hasClass('hidden')) {
-                                var postId = data[$(this).index()].id;
-                                var postUrl = "https://danbooru.donmai.us/posts/" + postId;
-                                window.open(postUrl, "_blank");
+                                // moved to button code 
                             } else {
                                 // remove overlay '
                                 removeOverlay();
@@ -199,6 +141,18 @@ $(document).ready(function() {
                             setTimeout(function() {
                                 startAutoscroll();
                             }, delay);
+                        }
+                        // Add button to each image
+                        function addOpenButtonToImage(image) {
+                            var button = $("<button>").addClass("open-button").text("Open");
+                            image.parent().append(button);
+
+                            button.on("click", function(e) {
+                                e.stopPropagation();
+                                var postId = data[image.index()].id;
+                                var postUrl = "https://danbooru.donmai.us/posts/" + postId;
+                                window.open(postUrl, "_blank");
+                            });
                         }
 
                     }
