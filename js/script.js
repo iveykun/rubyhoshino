@@ -31,7 +31,7 @@ $(document).ready(function() {
             rubyimageContainer.scrollLeft((scrollWidth - containerWidth) / 2);
 
             // Set the maximum height of the images relative to the window's inner height
-            imageWrapper.find(".image").css("max-height", windowInnerHeight + "px");
+            imageWrapper.find(".image").css("max-height", windowInnerHeight-100 + "px");
 
             // Start scrolling immediately after images are loaded
             rubyimageContainer.animate({ scrollLeft: "+=300" }, 3000);
