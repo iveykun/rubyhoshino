@@ -1,4 +1,10 @@
 $(document).ready(function() {
+    // Click event handler for Reddit button
+    $(".social-button.reddit").on("click", function() {
+        var redditUrl = "https://www.reddit.com/r/ChurchOfRubyHoshino/";
+        window.open(redditUrl, "_blank");
+    });
+
     var searchTerm = "hoshino_ruby"; // Search term with tags and G rating
     var url = "https://danbooru.donmai.us/posts.json?tags=" + encodeURIComponent(searchTerm) + "+rating:" + encodeURIComponent("g");
 
@@ -20,11 +26,7 @@ $(document).ready(function() {
             var amount_of_pics = 50;
             var imagesToShow = Math.min(data.length, amount_of_pics);
             var loadedImages = 0;
-            // Click event handler for Reddit button
-            $(".social-button.reddit").on("click", function() {
-                var redditUrl = "https://www.reddit.com/r/ChurchOfRubyHoshino/";
-                window.open(redditUrl, "_blank");
-            });
+
             for (var i = 0; i < imagesToShow; i++) {
                 var image = $("<img>").addClass("image").attr("src", data[i].file_url).on("load", function() {
                     loadedImages++;
@@ -97,27 +99,32 @@ $(document).ready(function() {
                         // Start autoscrolling
                         startAutoscroll();
 
-                        // move overlay
-                        var isScrolling = false;
+                        // move overlay when scrolling over wrapper
+                        var isScrollingOverlay = false;
 
                         $('.wrapper').on('wheel', function(event) {
-                            if (!isScrolling) {
-                                isScrolling = true;
+                            if (!isScrollingOverlay) {
+                                isScrollingOverlay = true;
                                 if (event.originalEvent.deltaY > 0) {
                                     removeOverlay();
                                 } else {
-                                    $('.overlay').stop().animate({ height: "100vh" }, 200);
-                                    // 1 second delay
-                                    setTimeout(function() {
-                                        $('.vertical-bar-behind').removeClass('hidden');
-                                    }, 200);
+                                    addOverlay();
 
                                 }
                                 setTimeout(function() {
-                                    isScrolling = false;
-                                }, 200); // Adjust the delay as needed
+                                    isScrollingOverlay = false;
+                                }, 300); // Adjust the delay as needed
                             }
                         });
+                        $('.vertical-bar-behind').on('click', function() {
+                            if ($('.vertical-bar-behind').hasClass('hidden')) {
+                                // this means that the overlay had been hidden beforehand
+                                addOverlay();
+                            } else {
+                                removeOverlay();
+                            }
+                        });
+
 
 
                         // Click event handler for images
@@ -168,6 +175,14 @@ $(document).ready(function() {
 
         $('.overlay').stop().animate({ height: "0" }, 200);
         $('.vertical-bar-behind').addClass('hidden');
+    }
+
+    function addOverlay() {
+        $('.overlay').stop().animate({ height: "100vh" }, 200);
+        // 1 second delay
+        setTimeout(function() {
+            $('.vertical-bar-behind').removeClass('hidden');
+        }, 200);
     }
 
 
