@@ -38,6 +38,7 @@ $(document).ready(function() {
                             // Restore the scroll position
                             rubyimageContainer.scrollLeft(scrollPosition);
                         }
+
                         // Call the function initially
                         handleUIUpdates(rubyimageContainer.scrollLeft());
                         // Handle window resize event
@@ -88,7 +89,11 @@ $(document).ready(function() {
                             var scrollPosition = rubyimageContainer.scrollLeft();
                             handleUIUpdates(scrollPosition);
                         });
-
+                        // Click event handler for Reddit button
+                        $(".social-button.reddit").on("click", function() {
+                            var redditUrl = "https://www.reddit.com/r/ChurchOfRubyHoshino/";
+                            window.open(redditUrl, "_blank");
+                        });
                         // Start autoscrolling
                         startAutoscroll();
 
@@ -130,8 +135,6 @@ $(document).ready(function() {
                         });
 
 
-
-
                     }
                 });
 
@@ -143,6 +146,23 @@ $(document).ready(function() {
     }).fail(function() {
         alert("Failed to fetch images. Please try again later.");
     });
+
+    function handleLogoUpdates() {
+        var screenWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+        var redditButton = document.querySelector(".social-button.reddit");
+
+        if (screenWidth < 1368) {
+            redditButton.classList.add("small-screen");
+        } else {
+            redditButton.classList.remove("small-screen");
+        }
+    }
+
+    // Call the function initially
+    handleLogoUpdates();
+
+    // Update the button on window resize
+    window.addEventListener("resize", handleLogoUpdates);
 
     function removeOverlay() {
 
