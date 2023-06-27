@@ -20,7 +20,11 @@ $(document).ready(function() {
             var amount_of_pics = 50;
             var imagesToShow = Math.min(data.length, amount_of_pics);
             var loadedImages = 0;
-
+            // Click event handler for Reddit button
+            $(".social-button.reddit").on("click", function() {
+                var redditUrl = "https://www.reddit.com/r/ChurchOfRubyHoshino/";
+                window.open(redditUrl, "_blank");
+            });
             for (var i = 0; i < imagesToShow; i++) {
                 var image = $("<img>").addClass("image").attr("src", data[i].file_url).on("load", function() {
                     loadedImages++;
@@ -89,11 +93,7 @@ $(document).ready(function() {
                             var scrollPosition = rubyimageContainer.scrollLeft();
                             handleUIUpdates(scrollPosition);
                         });
-                        // Click event handler for Reddit button
-                        $(".social-button.reddit").on("click", function() {
-                            var redditUrl = "https://www.reddit.com/r/ChurchOfRubyHoshino/";
-                            window.open(redditUrl, "_blank");
-                        });
+
                         // Start autoscrolling
                         startAutoscroll();
 
