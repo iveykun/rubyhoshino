@@ -206,7 +206,11 @@ h1 {
     text-align: center;
     transition: all 0.3s ease;
     margin-bottom: 10px;
-    /* Add some bottom margin to separate buttons */
+}
+
+.social-button:hover {
+    filter: brightness(150%);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
 }
 
 .social-button.discord {
