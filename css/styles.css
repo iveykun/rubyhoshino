@@ -67,7 +67,7 @@ h1 {
 }
 
 .image {
-    max-width: 100%;
+    max-width: none;
     max-height: none;
     width: auto;
     height: auto;
@@ -97,15 +97,15 @@ h1 {
     /* Center horizontally */
     transform: translateX(-50%);
     /* Adjust to center the text */
-    font-size: 24px;
+    font-size: 22px;
     font-weight: bold;
-    font-family: Harrington;
+    font-family: "Harrington", "French Script MT", cursive;
     color: #E0115F;
     transition: font-size 0.2s cubic-bezier(1, 0, 0, 1);
 }
 
 .touch-to-unlock {
-    bottom: 77vh;
+    bottom: 57vh;
     font-size: 48px;
 }
 
@@ -121,8 +121,10 @@ h1 {
     /* Center items horizontally */
     justify-content: center;
     /* Center items vertically */
+    text-align: center;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
     transition: width 0.3s cubic-bezier(1, 0, 0, 1), left 0.3s cubic-bezier(1, 0, 0, 1);
+    box-sizing: border-box;
 }
 
 .vertical-bar-behind {
