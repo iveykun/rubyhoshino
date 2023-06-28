@@ -45,7 +45,7 @@ function mainFunction(rating) {
                     });
 
                     // Start autoscrolling
-                    startAutoscroll(startAutoscroll);
+                    startAutoscroll(imagesToShow);
 
                     // Move overlay when scrolling over wrapper
                     var isScrollingOverlay = false;
