@@ -82,7 +82,7 @@ function mainFunction(rating) {
                             // Remove the existing image_wrapper
                             rubyimageContainer.find(".image_wrapper").remove();
 
-                            mainFunction("g,s,q,e");
+                            mainFunction("s,q,e");
                             $("#dynamicHeading").text("Jail of Ruby Hoshino");
                             //showPopupMessage("NSFW ON", 3000);
                             return;
