@@ -1,17 +1,22 @@
 $(document).ready(function() {
+    // Initialize counter
+    var autoscrollCount = 0;
+    var isAutoscrolling = false;
+
+    var rubyimageContainer = $("#rubyimageContainer");
+    var imageWrapper = $("<div>").addClass("image_wrapper"); // Create a new wrapper element
+
+    var searchTerm = "hoshino_ruby"; // Search term with tags and G rating
+    var url = "https://danbooru.donmai.us/posts.json?tags=" + encodeURIComponent(searchTerm) + "+rating:" + encodeURIComponent("g");
+
     // Click event handler for Reddit button
     $(".social-button.reddit").on("click", function() {
         var redditUrl = "https://www.reddit.com/r/ChurchOfRubyHoshino/";
         window.open(redditUrl, "_blank");
     });
 
-    var searchTerm = "hoshino_ruby"; // Search term with tags and G rating
-    var url = "https://danbooru.donmai.us/posts.json?tags=" + encodeURIComponent(searchTerm) + "+rating:" + encodeURIComponent("g");
-
     $.getJSON(url, function(data) {
         if (data.length > 0) {
-            var rubyimageContainer = $("#rubyimageContainer");
-            var imageWrapper = $("<div>").addClass("image_wrapper"); // Create a new wrapper element
             rubyimageContainer.append(imageWrapper); // Append the wrapper to the container
 
             // Shuffle the array of data using Fisher-Yates algorithm
@@ -31,73 +36,27 @@ $(document).ready(function() {
                 var image = $("<img>").addClass("image").attr("src", data[i].file_url).on("load", function() {
                     loadedImages++;
                     if (loadedImages === imagesToShow) {
-                        // Function to handle UI updates
-                        function handleUIUpdates(scrollPosition) {
-                            var containerWidth = rubyimageContainer.width();
-                            var scrollWidth = imageWrapper.outerWidth();
-                            var windowInnerHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
 
-                            imageWrapper.width(scrollWidth);
-                            rubyimageContainer.scrollLeft((scrollWidth - containerWidth) / 2);
-                            imageWrapper.find(".image").css("max-height", windowInnerHeight - 100 + "px");
-
-                            // Restore the scroll position
-                            rubyimageContainer.scrollLeft(scrollPosition);
-                        }
-
-                        // Call the function initially
                         handleUIUpdates(rubyimageContainer.scrollLeft());
                         // Handle window resize event
+                        // TODO: make the text/sidebar more smooth with resize
                         $(window).on("resize", function() {
                             var scrollPosition = rubyimageContainer.scrollLeft();
                             handleUIUpdates(scrollPosition);
                         });
-                        // Start scrolling after images are loaded
-                        // Initialize counter
-                        var scrollCounter = 0;
-                        var isAutoscrolling = false;
-                        // Start scrolling after images are loaded
-                        function startAutoscroll() {
-                            isAutoscrolling = true;
-                            animateScroll();
-                        }
-
-                        // Animation loop for scrolling
-                        function animateScroll() {
-                            if (!isAutoscrolling) {
-                                return;
-                            }
-
-                            rubyimageContainer.animate({ scrollLeft: "+=500" }, {
-                                duration: 2000,
-                                complete: function() {
-                                    scrollCounter++;
-                                    if (scrollCounter === imagesToShow + 1) {
-                                        scrollCounter = 0;
-                                        rubyimageContainer.animate({ scrollLeft: "0" }, {
-                                            duration: 1000,
-                                        });
-                                    }
-                                    // Delay before starting the next animation cycle
-                                    setTimeout(function() {
-                                        requestAnimationFrame(animateScroll);
-                                    }, 1000); // Adjust the delay as needed
-                                }
-                            });
-                        }
-
 
                         // Call the function initially
                         handleUIUpdates(rubyimageContainer.scrollLeft());
-
+                        handleLogoUpdates();
                         // Handle window resize event
                         $(window).on("resize", function() {
                             var scrollPosition = rubyimageContainer.scrollLeft();
                             handleUIUpdates(scrollPosition);
+                            handleLogoUpdates();
                         });
 
                         // Start autoscrolling
-                        startAutoscroll();
+                        startAutoscroll(startAutoscroll);
 
                         // move overlay when scrolling over wrapper
                         var isScrollingOverlay = false;
@@ -125,8 +84,6 @@ $(document).ready(function() {
                             }
                         });
 
-
-
                         // Click event handler for images
                         imageWrapper.on("click", ".image", function() {
                             if ($('.vertical-bar-behind').hasClass('hidden')) {
@@ -140,7 +97,6 @@ $(document).ready(function() {
                                 removeOverlay();
                             }
                         });
-
 
                     }
                 });
@@ -165,12 +121,6 @@ $(document).ready(function() {
         }
     }
 
-    // Call the function initially
-    handleLogoUpdates();
-
-    // Update the button on window resize
-    window.addEventListener("resize", handleLogoUpdates);
-
     function removeOverlay() {
 
         $('.overlay').stop().animate({ height: "0" }, 200);
@@ -184,6 +134,47 @@ $(document).ready(function() {
             $('.vertical-bar-behind').removeClass('hidden');
         }, 200);
     }
+    // Function to handle UI updates
+    function handleUIUpdates(scrollPosition) {
+        var containerWidth = rubyimageContainer.width();
+        var scrollWidth = imageWrapper.outerWidth();
+        var windowInnerHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
 
+        imageWrapper.width(scrollWidth);
+        rubyimageContainer.scrollLeft((scrollWidth - containerWidth) / 2);
+        imageWrapper.find(".image").css("max-height", windowInnerHeight - 100 + "px");
+
+        // Restore the scroll position
+        rubyimageContainer.scrollLeft(scrollPosition);
+    }
+
+    function startAutoscroll(imagesToShow) {
+        isAutoscrolling = true;
+        animateScroll(imagesToShow);
+    }
+
+    // Animation loop for scrolling
+    function animateScroll(imagesToShow) {
+        if (!isAutoscrolling) {
+            return;
+        }
+
+        rubyimageContainer.animate({ scrollLeft: "+=500" }, {
+            duration: 2000,
+            complete: function() {
+                autoscrollCount++;
+                if (autoscrollCount === imagesToShow + 1) {
+                    autoscrollCount = 0;
+                    rubyimageContainer.animate({ scrollLeft: "0" }, {
+                        duration: 1000,
+                    });
+                }
+                // Delay before starting the next animation cycle
+                setTimeout(function() {
+                    requestAnimationFrame(animateScroll);
+                }, 1000); // Adjust the delay as needed
+            }
+        });
+    }
 
 });
