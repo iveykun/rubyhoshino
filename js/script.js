@@ -187,7 +187,9 @@ function mainFunction(rating) {
             duration: 2000,
             complete: function() {
                 autoscrollCount++;
-                if (autoscrollCount === imagesToShow + 1) {
+                console.log(autoscrollCount);
+                if (autoscrollCount >= imagesToShow) {
+                    console.log("activated");
                     autoscrollCount = 0;
                     rubyimageContainer.animate({ scrollLeft: "0" }, {
                         duration: 1000,
@@ -195,7 +197,9 @@ function mainFunction(rating) {
                 }
                 // Delay before starting the next animation cycle
                 setTimeout(function() {
-                    requestAnimationFrame(animateScroll);
+                    requestAnimationFrame(function() {
+                        animateScroll(imagesToShow); // Call the function recursively
+                    });
                 }, 1000); // Adjust the delay as needed
             }
         });
