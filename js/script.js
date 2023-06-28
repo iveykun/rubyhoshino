@@ -83,7 +83,6 @@ function mainFunction(rating) {
                             rubyimageContainer.find(".image_wrapper").remove();
 
                             mainFunction("g,s,q,e");
-                            clickCounterHeader = 0;
                             $("#dynamicHeading").text("Jail of Ruby Hoshino");
                             //showPopupMessage("NSFW ON", 3000);
                             return;
