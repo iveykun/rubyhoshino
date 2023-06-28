@@ -1,4 +1,7 @@
-$(document).ready(function() {
+var secretCode = false;
+
+function mainFunction(rating) {
+    console.log(rating);
     // Initialize counter
     var autoscrollCount = 0;
     var isAutoscrolling = false;
@@ -7,108 +10,114 @@ $(document).ready(function() {
     var imageWrapper = $("<div>").addClass("image_wrapper"); // Create a new wrapper element
 
     var searchTerm = "hoshino_ruby"; // Search term with tags and G rating
-    var url = "https://danbooru.donmai.us/posts.json?tags=" + encodeURIComponent(searchTerm) + "+rating:" + encodeURIComponent("g");
+    var url = "https://danbooru.donmai.us/posts.json?tags=" + encodeURIComponent(searchTerm) + "+rating:" + encodeURIComponent(rating);
 
     // Click event handler for Reddit button
     $(".social-button.reddit").on("click", function() {
         var redditUrl = "https://www.reddit.com/r/ChurchOfRubyHoshino/";
         window.open(redditUrl, "_blank");
     });
+    rubyimageContainer.append(imageWrapper); // Append the wrapper to the container
 
-    $.getJSON(url, function(data) {
-        if (data.length > 0) {
-            rubyimageContainer.append(imageWrapper); // Append the wrapper to the container
+    function displayImages(data, amount_of_pics) {
+        // Display a random selection of images
+        var imagesToShow = Math.min(data.length, amount_of_pics);
+        var loadedImages = 0;
 
-            // Shuffle the array of data using Fisher-Yates algorithm
-            for (var i = data.length - 1; i > 0; i--) {
-                var j = Math.floor(Math.random() * (i + 1));
-                var temp = data[i];
-                data[i] = data[j];
-                data[j] = temp;
-            }
+        // Empty the imageWrapper to remove existing images
+        imageWrapper.empty();
+        for (var i = 0; i < imagesToShow; i++) {
+            var image = $("<img>").addClass("image").attr("src", data[i].file_url).on("load", function() {
+                loadedImages++;
 
-            // Display a random selection of images
-            var amount_of_pics = 50;
-            var imagesToShow = Math.min(data.length, amount_of_pics);
-            var loadedImages = 0;
+                handleUIUpdates(rubyimageContainer.scrollLeft());
+                if (loadedImages === imagesToShow) {
 
-            for (var i = 0; i < imagesToShow; i++) {
-                var image = $("<img>").addClass("image").attr("src", data[i].file_url).on("load", function() {
-                    loadedImages++;
-                    if (loadedImages === imagesToShow) {
+                    // Call the function initially
+                    handleUIUpdates(rubyimageContainer.scrollLeft());
+                    handleLogoUpdates();
 
-                        handleUIUpdates(rubyimageContainer.scrollLeft());
-                        // Handle window resize event
-                        // TODO: make the text/sidebar more smooth with resize
-                        $(window).on("resize", function() {
-                            var scrollPosition = rubyimageContainer.scrollLeft();
-                            handleUIUpdates(scrollPosition);
-                        });
-
-                        // Call the function initially
-                        handleUIUpdates(rubyimageContainer.scrollLeft());
+                    // Handle window resize event
+                    $(window).on("resize", function() {
+                        var scrollPosition = rubyimageContainer.scrollLeft();
+                        handleUIUpdates(scrollPosition);
                         handleLogoUpdates();
-                        // Handle window resize event
-                        $(window).on("resize", function() {
-                            var scrollPosition = rubyimageContainer.scrollLeft();
-                            handleUIUpdates(scrollPosition);
-                            handleLogoUpdates();
-                        });
+                    });
 
-                        // Start autoscrolling
-                        startAutoscroll(startAutoscroll);
+                    // Start autoscrolling
+                    startAutoscroll(startAutoscroll);
 
-                        // move overlay when scrolling over wrapper
-                        var isScrollingOverlay = false;
+                    // Move overlay when scrolling over wrapper
+                    var isScrollingOverlay = false;
 
-                        $('.wrapper').on('wheel', function(event) {
-                            if (!isScrollingOverlay) {
-                                isScrollingOverlay = true;
-                                if (event.originalEvent.deltaY > 0) {
-                                    removeOverlay();
-                                } else {
-                                    addOverlay();
-
-                                }
-                                setTimeout(function() {
-                                    isScrollingOverlay = false;
-                                }, 300); // Adjust the delay as needed
-                            }
-                        });
-                        $('.vertical-bar-behind').on('click', function() {
-                            if ($('.vertical-bar-behind').hasClass('hidden')) {
-                                // this means that the overlay had been hidden beforehand
+                    $('.wrapper').on('wheel', function(event) {
+                        if (!isScrollingOverlay) {
+                            isScrollingOverlay = true;
+                            if (event.originalEvent.deltaY > 0) {
+                                removeOverlay();
+                            } else {
                                 addOverlay();
-                            } else {
-                                removeOverlay();
                             }
-                        });
+                            setTimeout(function() {
+                                isScrollingOverlay = false;
+                            }, 300); // Adjust the delay as needed
+                        }
+                    });
 
-                        // Click event handler for images
-                        imageWrapper.on("click", ".image", function() {
-                            if ($('.vertical-bar-behind').hasClass('hidden')) {
-                                var index = $(this).index(".image");
-                                var postId = data[index].id;
-                                var postUrl = "https://danbooru.donmai.us/posts/" + postId;
-                                window.open(postUrl, "_blank");
+                    $('.vertical-bar-behind').on('click', function() {
+                        if ($('.vertical-bar-behind').hasClass('hidden')) {
+                            // This means that the overlay had been hidden beforehand
+                            addOverlay();
+                        } else {
+                            removeOverlay();
+                        }
+                    });
 
-                            } else {
-                                // remove overlay '
-                                removeOverlay();
-                            }
-                        });
+                    var clickCounterHeader = 0;
+                    $('.header').on('click', function() {
+                        clickCounterHeader++;
+                        if (clickCounterHeader == 9) {
+                            console.log("test");
+                            secretCode = true;
+                            // Remove the existing image_wrapper
+                            rubyimageContainer.find(".image_wrapper").remove();
 
-                    }
-                });
+                            mainFunction("g,s,q,e");
+                            clickCounterHeader = 0;
+                            $("#dynamicHeading").text("Jail of Ruby Hoshino");
+                            //showPopupMessage("NSFW ON", 3000);
+                            return;
+                        }
+                    });
 
-                imageWrapper.append(image);
-            }
-        } else {
-            alert("No images found for the search term: " + searchTerm);
+                    // Click event handler for images
+                    imageWrapper.on("click", ".image", function() {
+                        if ($('.vertical-bar-behind').hasClass('hidden')) {
+                            var index = $(this).index(".image");
+                            var postId = data[index].id;
+                            var postUrl = "https://danbooru.donmai.us/posts/" + postId;
+                            window.open(postUrl, "_blank");
+                        } else {
+                            // Remove overlay
+                            removeOverlay();
+                        }
+                    });
+                }
+            });
+            image.css("height", "100% !important");
+            imageWrapper.append(image);
         }
-    }).fail(function() {
-        alert("Failed to fetch images. Please try again later.");
-    });
+    }
+
+    function shuffleArray(array) {
+        // Shuffle the array using Fisher-Yates algorithm
+        for (var i = array.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var temp = array[i];
+            array[i] = array[j];
+            array[j] = temp;
+        }
+    }
 
     function handleLogoUpdates() {
         var screenWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
@@ -153,6 +162,22 @@ $(document).ready(function() {
         animateScroll(imagesToShow);
     }
 
+    function showPopupMessage(message, duration) {
+        var popupMessage = $("#popupMessage");
+        var popupText = $("#popupText");
+
+        // Set the message text
+        popupText.text(message);
+
+        // Show the popup message
+        popupMessage.addClass("show");
+
+        // Hide the popup message after the specified duration
+        setTimeout(function() {
+            popupMessage.removeClass("show");
+        }, duration);
+    }
+
     // Animation loop for scrolling
     function animateScroll(imagesToShow) {
         if (!isAutoscrolling) {
@@ -176,5 +201,22 @@ $(document).ready(function() {
             }
         });
     }
+    // main code 
+    $.getJSON(url, function(data) {
+        if (data.length > 0) {
+            shuffleArray(data);
 
+            var amount_of_pics = 50;
+            displayImages(data, amount_of_pics);
+        } else {
+            alert("No images found for the search term: " + searchTerm);
+        }
+    }).fail(function() {
+        alert("Failed to fetch images. Please try again later.");
+    });
+
+}
+
+$(document).ready(function() {
+    mainFunction("g");
 });
