@@ -58,7 +58,7 @@ h1 {
     max-width: 10%;
     height: auto;
     position: absolute;
-    right: 25%;
+    right: 20%;
     top: 5%;
     transform: translateY(-50%);
 }
@@ -174,7 +174,7 @@ h1 {
     justify-content: center;
     /* Center items vertically */
     height: 45vh;
-    transition: height 0.5s ease, width 0.3s cubic-bezier(1, 0, 0, 1), left 0.3s cubic-bezier(1, 0, 0, 1);
+    transition: height 0.5s ease, width 0.3s cubic-bezier(1, 0, 0, 1), left 0.3s cubic-bezier(1, 0, 0, 1), background-color 0.3s ease;
     ;
 }
 
@@ -292,11 +292,21 @@ h1 {
         font-size: 24px;
         transition: font-size 0.2s cubic-bezier(1, 0, 0, 1);
     }
+    .gif-image {
+        right: 3%;
+    }
 }
 
 @media (max-width: 768px) {
     h1 {
-        font-size: 1.5vh;
+        font-size: 3.5vh;
         transition: font-size 0.2s cubic-bezier(1, 0, 0, 1);
+    }
+    .vertical-bar-behind {
+        background-color: transparent;
+        transition: background-color 0.3s ease;
+    }
+    .gif-image {
+        right: 3%;
     }
 }
