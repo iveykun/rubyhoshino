@@ -54,6 +54,15 @@ h1 {
     display: none;
 }
 
+.gif-image {
+    max-width: 10%;
+    height: auto;
+    position: absolute;
+    right: 25%;
+    top: 5%;
+    transform: translateY(-50%);
+}
+
 
 /* Hide scrollbar for IE, Edge and Firefox */
 
