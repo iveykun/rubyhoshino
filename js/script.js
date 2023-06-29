@@ -88,6 +88,39 @@ function mainFunction(rating) {
                             return;
                         }
                     });
+                    // Dragging variables
+                    var isDragging = false;
+                    var startPosX = 0;
+                    var currentPosX = 0;
+                    var scrollLeft = 0;
+                    // Touch events for dragging overlay on mobile devices
+                    $(document).on('touchstart', function(event) {
+                        if ($('.overlay').hasClass('hidden')) {
+                            return;
+                        }
+                        event.preventDefault();
+                        isDragging = true;
+                        startPosX = event.originalEvent.touches[0].pageX;
+                        scrollLeft = rubyimageContainer.scrollLeft();
+                        pauseAutoscroll();
+                    });
+
+                    $(document).on('touchmove', function(event) {
+                        if (isDragging) {
+                            event.preventDefault();
+                            currentPosX = event.originalEvent.touches[0].pageX;
+                            var moveX = startPosX - currentPosX;
+                            rubyimageContainer.scrollLeft(scrollLeft + moveX);
+                        }
+                    });
+
+                    $(document).on('touchend', function(event) {
+                        if (isDragging) {
+                            isDragging = false;
+                            resumeAutoscrollWithDelay(2000); // Delay in milliseconds before resuming autoscroll
+                        }
+                    });
+
 
                     // Click event handler for images
                     imageWrapper.on("click", ".image", function() {
@@ -107,6 +140,19 @@ function mainFunction(rating) {
             imageWrapper.append(image);
         }
     }
+
+    // Function to pause autoscroll
+    function pauseAutoscroll() {
+        clearInterval(autoscrollInterval);
+    }
+
+    // Function to resume autoscroll with a delay
+    function resumeAutoscrollWithDelay(delay) {
+        setTimeout(function() {
+            startAutoscroll();
+        }, delay);
+    }
+
 
     function shuffleArray(array) {
         // Shuffle the array using Fisher-Yates algorithm
