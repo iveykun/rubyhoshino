@@ -102,6 +102,7 @@ const main = () => {
             completed = true;
             rating = "s,q,e";
             headerElm.textContent = "Jail of Ruby Hoshino";
+            document.querySelector("title").textContent = "Jail of Ruby Hoshino";
             galleryElm.innerHTML = "";
             getImages().then((imgs) => imgs.forEach((img) => addSingleImage(img)));
         } else {
