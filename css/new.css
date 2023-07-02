@@ -1,0 +1,222 @@
+
+/* tablets and desktop */
+@media only screen and (min-width: 768px) {
+
+}
+
+/* phones */
+@media only screen and (max-width: 767px) {
+    .margins {
+        font-size: 0.7em;
+    }
+}
+
+/* portrait phones */
+@media only screen and (max-width: 767px) and (orientation: portrait) {
+    .margins {
+        font-size: 0.5em;
+    }
+}
+
+:root {
+    --margin-overlay-size: 12vh;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+}
+
+h1 {
+    font-size: 2.5em;
+    text-align: center;
+}
+
+.overlay-container {
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    z-index: 3;
+    pointer-events: none;
+}
+
+.overlay {
+    position: relative;
+    z-index: 3;
+    height: 100%;
+    width: 100%;
+    scroll-snap-type: y mandatory;
+    transition: all 1s ease-in-out;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    --side-pad: 0 1em;
+    --reddit-size: calc(var(--margin-overlay-size) - 3vh);
+}
+
+.overlay.hidden {
+    margin-top: -100%;
+}
+
+.margins {
+    position: fixed;
+    z-index: 3;
+    width: 100%;
+    pointer-events: all;
+}
+
+.margins > * {
+    position: fixed;
+    height: var(--margin-overlay-size);
+    width: 100%;
+    background: #ef8bb0;
+}
+
+.margins .top {
+    top: 0;
+    display: flex;
+    gap: 5%;
+    justify-content: center;
+    align-items: center;
+    color: white;
+}
+
+.wotagei {
+    height: calc(var(--margin-overlay-size) * 0.9);
+}
+
+.margins .bottom {
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cover {
+    pointer-events: all;
+    scroll-snap-align: start;
+    height: 100%;
+    width: 100vw;
+    background: rgba(255, 241, 241, 0.5);
+}
+
+.placeholder {
+    scroll-snap-align: start;
+    height: 100%;
+    width: 100vw;
+}
+
+.banner {
+    margin-left: 4%;
+    height: 100%;
+    background: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    z-index: 4;
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    pointer-events: all;
+}
+
+.banner-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    font-family: "Harrington", "French Script MT", cursive;
+    font-weight: bold;
+    color: #E0115F;
+    margin: var(--side-pad);
+}
+
+.banner-content .text-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.banner-content .unlock-text {
+    font-size: 2.5em;
+    text-align: center;
+
+    /* Forces all words to wrap */
+    width: min-intrinsic;
+    width: -webkit-min-content;
+    width: -moz-min-content;
+    width: min-content;
+    display: table-caption;
+    display: -ms-grid;
+    -ms-grid-columns: min-content;
+}
+
+.banner-content .author {
+    font-size: 1.3em;
+}
+
+.community-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.reddit {
+    display: block;
+    height: var(--reddit-size);
+    aspect-ratio: 1 / 1;
+}
+
+.reddit img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    transition: all 0.3s ease;
+}
+
+.reddit:hover img {
+    filter: brightness(150%) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
+}
+
+
+
+/* Actual images content */
+main {
+    width: 100%;
+    height: 100%;
+    display: flex;
+}
+
+main .content {
+    margin: var(--margin-overlay-size) 0;
+}
+
+.gallery {
+    height: 100%;
+    width: fit-content;
+    display: flex;
+}
+
+.gallery a {
+    height: 100%;
+    aspect-ratio: var(--img-ratio);
+}
+
+.gallery img {
+    height: 100%;
+    width: 100%;
+}
+
+.gallery a:nth-child(odd) img {
+    background: #fed766;
+}
+
+.gallery a:nth-child(even) img {
+    background: #9b0c53;
+}
