@@ -168,19 +168,32 @@ h1 {
     justify-content: space-around;
 }
 
-.reddit {
+.button {
     display: block;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
     height: var(--reddit-size);
     aspect-ratio: 1 / 1;
 }
 
 .reddit img {
     width: 100%;
+    margin-right: auto;
     aspect-ratio: 1 / 1;
     transition: all 0.3s ease;
 }
 
 .reddit:hover img {
+    filter: brightness(150%) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
+}
+
+.info img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    transition: all 0.3s ease;
+}
+
+.info:hover img {
     filter: brightness(150%) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
 }
 
