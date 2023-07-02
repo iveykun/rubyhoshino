@@ -82,7 +82,7 @@ const main = () => {
     // auto scrolling
     const pageScroll = () => {
         setTimeout(() => {
-            requestAnimationFrame(() => window.scrollBy({ left: window.innerWidth, behavior: "smooth" }));
+            requestAnimationFrame(() => window.scrollBy({ left: window.innerWidth / 4, behavior: "smooth" }));
             pageScroll();
         }, 4000);
     }
