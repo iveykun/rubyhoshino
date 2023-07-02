@@ -1,3 +1,4 @@
+
 const searchTerm = "hoshino_ruby";
 const galleryElm = document.querySelector(".gallery");
 const overlayElm = document.querySelector(".overlay");
@@ -14,8 +15,8 @@ const isInViewport = (el) => {
 };
 
 
-const getImages = async() => {
-    const url = `https://danbooru.donmai.us/posts.json?tags=${encodeURIComponent(searchTerm)}+rating:${encodeURIComponent(rating)}`;
+const getImages = async () => {
+    const  url = `https://danbooru.donmai.us/posts.json?tags=${encodeURIComponent(searchTerm)}+rating:${encodeURIComponent(rating)}`;
 
     const data = await (await fetch(url)).json();
 
@@ -26,7 +27,7 @@ const getImages = async() => {
 };
 
 const addSingleImage = (img) => {
-    if (!img.file_url) {
+    if(!img.file_url) {
         return;
     }
 
@@ -51,7 +52,7 @@ const addSingleImage = (img) => {
 // throttle shit
 var throttleTimer;
 const throttle = (callback, time) => {
-    if (throttleTimer) return;
+    if(throttleTimer) return;
 
     throttleTimer = true;
     callback();
@@ -62,7 +63,7 @@ const throttle = (callback, time) => {
 
 const handleInfiniteScroll = () => {
     const secondToLastImg = document.querySelector(".gallery a:nth-last-child(2)");
-    if (isInViewport(secondToLastImg)) {
+    if(isInViewport(secondToLastImg)) {
         throttle(() => {
             console.log("get new");
             getImages().then((imgs) => {
@@ -76,13 +77,13 @@ const main = () => {
     getImages().then((imgs) => {
         imgs.forEach((img) => addSingleImage(img));
 
-        window.addEventListener("scroll", handleInfiniteScroll);
+        document.querySelector("main").addEventListener("scroll", handleInfiniteScroll);
     });
 
     // auto scrolling
     const pageScroll = () => {
         setTimeout(() => {
-            requestAnimationFrame(() => window.scrollBy({ left: window.innerWidth / 4, behavior: "smooth" }));
+            requestAnimationFrame(() => document.querySelector("main").scrollBy({ left: window.innerWidth, behavior: "smooth" }));
             pageScroll();
         }, 4000);
     }
@@ -98,11 +99,10 @@ const main = () => {
     var completed = false;
     const headerElm = document.querySelector(".margins h1");
     headerElm.addEventListener("click", () => {
-        if (clickCount > 5 && !completed) {
+        if(clickCount > 5 && !completed) {
             completed = true;
             rating = "s,q,e";
             headerElm.textContent = "Jail of Ruby Hoshino";
-            document.querySelector("title").textContent = "Jail of Ruby Hoshino";
             galleryElm.innerHTML = "";
             getImages().then((imgs) => imgs.forEach((img) => addSingleImage(img)));
         } else {
