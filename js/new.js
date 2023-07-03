@@ -83,7 +83,8 @@ const main = () => {
 
     // auto scrolling
     var autoScrollTimeout = null;
-    var scrollSpeed = 1; 
+    var scrollSpeed = 20; 
+
     const pageScroll = () => {
         // pause if tab not in focus
         if(document.hasFocus()) {
@@ -93,8 +94,6 @@ const main = () => {
         autoScrollTimeout = setTimeout(pageScroll, 10);
     };
     pageScroll();
-
-
     // disable is hovered
     const disableOnUserInteraction = () => {
         if(autoScrollTimeout) {
