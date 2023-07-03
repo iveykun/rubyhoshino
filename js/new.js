@@ -82,13 +82,18 @@ const main = () => {
 
     // auto scrolling
     var autoScrollTimeout = null;
-    var scrollSpeedSmooth = 20;
+    var scrollSpeedMozilla = 20;
     var scrollSpeed = 1;
+    var isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
 
     const pageScroll = () => {
         // pause if tab not in focus
         if (document.hasFocus()) {
-            requestAnimationFrame(() => mainElm.scrollBy({ left: scrollSpeedSmooth }));
+            if (isFirefox) {
+                requestAnimationFrame(() => mainElm.scrollBy({ left: scrollSpeedMozilla }));
+            } else {
+                requestAnimationFrame(() => mainElm.scrollBy({ left: scrollSpeed }));
+            }
         }
         clearTimeout(autoScrollTimeout); // ensures we don't get a lot of timeouts doing a scroll
         autoScrollTimeout = setTimeout(pageScroll, 10);
