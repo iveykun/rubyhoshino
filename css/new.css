@@ -208,6 +208,14 @@ main {
     overflow: auto;
     /* transition: all 0.5s ease; */
     scroll-behavior: smooth;
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+}
+
+main ::-webkit-scrollbar {
+    display: none;
 }
 
 main .content {
