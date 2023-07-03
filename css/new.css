@@ -205,14 +205,14 @@ main {
     height: 100%;
     display: flex;
     overflow: auto;
-    transition: all 0.5s ease;
+    /* transition: all 0.5s ease; */
 
     scroll-behavior: smooth;
 }
 
 main .content {
     margin: var(--margin-overlay-size) 0;
-    transition: all 0.5s ease;
+    /* transition: all 0.5s ease; */
 }
 
 .gallery {
