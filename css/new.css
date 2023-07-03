@@ -234,3 +234,31 @@ main .content {
 .gallery a:nth-child(even) img {
     background: #9b0c53;
 }
+
+/* code for info page */
+
+.text-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    width: 100%;
+    text-align: center;
+  }
+
+  .return {
+    color: white;
+    text-decoration: none;
+    transition: filter 0.2s ease;
+
+}
+
+.return:hover {
+    filter: brightness(150%) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
+    transition: filter 0.5s ease;
+}
+
+.info-image {
+    margin-left: 10px;
+}

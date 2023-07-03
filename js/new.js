@@ -83,15 +83,17 @@ const main = () => {
 
     // auto scrolling
     var autoScrollTimeout = null;
+    var scrollSpeed = 1; 
     const pageScroll = () => {
         // pause if tab not in focus
         if(document.hasFocus()) {
-            requestAnimationFrame(() => mainElm.scrollBy({ left: 1 }));
+            requestAnimationFrame(() => mainElm.scrollBy({ left: scrollSpeed }));
         }
         clearTimeout(autoScrollTimeout); // ensures we don't get a lot of timeouts doing a scroll
         autoScrollTimeout = setTimeout(pageScroll, 10);
     };
     pageScroll();
+
 
     // disable is hovered
     const disableOnUserInteraction = () => {
