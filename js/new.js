@@ -116,6 +116,20 @@ const main = () => {
     document.querySelector(".banner").addEventListener("click", () => scrollUpOverlay());
     document.querySelector(".cover").addEventListener("click", () => scrollUpOverlay());
 
+    // music
+    var playPauseButton = document.getElementById("playPauseButton");
+    var audio = document.getElementById("mephisto");
+
+    playPauseButton.addEventListener("click", function() {
+        if (audio.paused) {
+            audio.play();
+            playPauseButton.classList.add("playing");
+        } else {
+            audio.pause();
+            playPauseButton.classList.remove("playing");
+        }
+    });
+
     // nfsw
     var clickCount = 0;
     var completed = false;

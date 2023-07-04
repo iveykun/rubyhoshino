@@ -280,3 +280,13 @@ main .content {
 .info-image {
     margin-left: 10px;
 }
+
+#playPauseButton {
+    background-image: url("img/play.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+#playPauseButton.playing {
+    background-image: url("img/pause.png");
+}
