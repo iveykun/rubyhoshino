@@ -3,6 +3,7 @@ const galleryElm = document.querySelector(".gallery");
 const overlayElm = document.querySelector(".overlay");
 const mainElm = document.querySelector("main");
 var rating = "g";
+var SECRET_ON = false;
 
 const isInViewport = (el) => {
     const rect = el.getBoundingClientRect();
@@ -116,6 +117,7 @@ const main = () => {
     document.querySelector(".banner").addEventListener("click", () => scrollUpOverlay());
     document.querySelector(".cover").addEventListener("click", () => scrollUpOverlay());
 
+
     // nfsw
     var clickCount = 0;
     var completed = false;
@@ -123,6 +125,7 @@ const main = () => {
     headerElm.addEventListener("click", () => {
         if (clickCount > 5 && !completed) {
             completed = true;
+            SECRET_ON = true;
             rating = "s,q,e";
             headerElm.textContent = "Jail of Ruby Hoshino";
             galleryElm.innerHTML = "";
@@ -133,5 +136,39 @@ const main = () => {
     });
 };
 
-
 document.addEventListener("DOMContentLoaded", () => main(), false);
+var audio = null;
+var playImage = document.getElementById('playImage');
+// music
+function playAudio() {
+    var source = "music/idol-eunha.mp3";
+    if (SECRET_ON) {
+        source = "music/Mephisto.mp3";
+    }
+    if (!audio) {
+      audio = new Audio(source);
+      audio.addEventListener('canplaythrough', function() {
+        audio.play();
+        updatePlayButtonImage()
+      });
+    } else {
+      if (audio.paused) {
+        audio.play();
+        updatePlayButtonImage()
+      } else {
+        audio.pause();
+        updatePlayButtonImage()
+      }
+    }
+  }
+function updatePlayButtonImage() {
+    if (audio.paused) {
+        console.log("put play image");
+        playImage.src = 'img/play.png';
+    } else {
+        playImage.src = 'img/pause.png';
+        console.log("put pause image");
+
+    }
+}
+  
