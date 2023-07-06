@@ -173,7 +173,7 @@ function updatePlayButtonImage() {
     }
 }
 // Set the target release day (0 = Sunday, 1 = Monday, ..., 6 = Saturday)
-var targetReleaseDay = 2; // Wednesday
+var targetReleaseDay = 3; // Wednesday for me 
 
 // Set the target release time (24-hour format)
 var targetReleaseHour = 0; // 0:00 (midnight)
