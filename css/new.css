@@ -295,3 +295,9 @@ main .content {
 .info-image {
     margin-left: 10px;
 }
+
+#countdown {
+    z-index: 3;
+    font-size: 2.5em;
+    text-align: center;
+}

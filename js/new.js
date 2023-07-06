@@ -146,21 +146,22 @@ function playAudio() {
         source = "music/Mephisto.mp3";
     }
     if (!audio) {
-      audio = new Audio(source);
-      audio.addEventListener('canplaythrough', function() {
-        audio.play();
-        updatePlayButtonImage()
-      });
+        audio = new Audio(source);
+        audio.addEventListener('canplaythrough', function() {
+            audio.play();
+            updatePlayButtonImage()
+        });
     } else {
-      if (audio.paused) {
-        audio.play();
-        updatePlayButtonImage()
-      } else {
-        audio.pause();
-        updatePlayButtonImage()
-      }
+        if (audio.paused) {
+            audio.play();
+            updatePlayButtonImage()
+        } else {
+            audio.pause();
+            updatePlayButtonImage()
+        }
     }
-  }
+}
+
 function updatePlayButtonImage() {
     if (audio.paused) {
         console.log("put play image");
@@ -171,4 +172,67 @@ function updatePlayButtonImage() {
 
     }
 }
-  
+// Set the target release day (0 = Sunday, 1 = Monday, ..., 6 = Saturday)
+var targetReleaseDay = 2; // Wednesday
+
+// Set the target release time (24-hour format)
+var targetReleaseHour = 0; // 0:00 (midnight)
+
+// Update the countdown every second
+var countdownElement = document.getElementById('countdown');
+var countdownInterval = setInterval(updateCountdown, 1000);
+
+function updateCountdown() {
+    // Get the current date and time
+    var currentDate = new Date();
+
+    // Calculate the next release date and time
+    var releaseDateTime = getNextReleaseDateTime(currentDate);
+
+    // Calculate the remaining time until release
+    var remainingTime = releaseDateTime.getTime() - currentDate.getTime();
+
+    // If the release time has already passed, calculate the next release date and time
+    if (remainingTime <= 0) {
+        releaseDateTime = getNextReleaseDateTime(releaseDateTime);
+        remainingTime = releaseDateTime.getTime() - currentDate.getTime();
+    }
+
+    // Check if the release date is today
+    if (isSameDate(currentDate, releaseDateTime)) {
+        // Display a special message when the release is today
+        countdownElement.textContent = 'The manga chapter should be released today!';
+        return;
+    }
+
+    // Calculate the remaining days, hours, minutes, and seconds
+    var days = Math.floor(remainingTime / (1000 * 60 * 60 * 24));
+    var hours = Math.floor((remainingTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    var minutes = Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60));
+    var seconds = Math.floor((remainingTime % (1000 * 60)) / 1000);
+
+    // Update the countdown element with the remaining time
+    countdownElement.textContent = 'The manga chapter should be released in ' + days + ' days, ' + hours + ' hours, ' + minutes + ' minutes, ' + seconds + ' seconds';
+}
+
+function getNextReleaseDateTime(currentDate) {
+    var releaseDateTime = new Date(currentDate.getTime());
+
+    // Find the next release day
+    while (releaseDateTime.getDay() !== targetReleaseDay) {
+        releaseDateTime.setDate(releaseDateTime.getDate() + 1);
+    }
+
+    // Set the release time
+    releaseDateTime.setHours(targetReleaseHour, 0, 0, 0);
+
+    return releaseDateTime;
+}
+
+function isSameDate(date1, date2) {
+    return (
+        date1.getFullYear() === date2.getFullYear() &&
+        date1.getMonth() === date2.getMonth() &&
+        date1.getDate() === date2.getDate()
+    );
+}
