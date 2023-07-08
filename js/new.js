@@ -117,8 +117,6 @@ const main = () => {
     document.querySelector(".banner").addEventListener("click", () => scrollUpOverlay());
     document.querySelector(".cover").addEventListener("click", () => scrollUpOverlay());
 
-
-    // nfsw
     var clickCount = 0;
     var completed = false;
     const headerElm = document.querySelector(".margins h1");
