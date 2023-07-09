@@ -5,6 +5,12 @@ const mainElm = document.querySelector("main");
 var rating = "g";
 var SECRET_ON = false;
 
+var breakDates = [ // DATES WHEN AKA IS ON BREAK
+    new Date(2023, 6, 12) // July 12, 2023 (in milliseconds)
+    //new Date(2023, 6, 22)   // July 22, 2023 (in milliseconds)
+];
+
+
 const isInViewport = (el) => {
     const rect = el.getBoundingClientRect();
     return (
@@ -216,8 +222,21 @@ function updateCountdown() {
 function getNextReleaseDateTime(currentDate) {
     var releaseDateTime = new Date(currentDate.getTime());
 
-    // Find the next release day
-    while (releaseDateTime.getDay() !== targetReleaseDay) {
+    // Find the next release day, skipping weeks if necessary
+    while (true) {
+        var isBreakDate = breakDates.some(function(breakDate) {
+            return (
+                breakDate.getFullYear() === releaseDateTime.getFullYear() &&
+                breakDate.getMonth() === releaseDateTime.getMonth() &&
+                breakDate.getDate() === releaseDateTime.getDate()
+            );
+        });
+
+        if (!isBreakDate && releaseDateTime.getDay() === targetReleaseDay) {
+            // If the release day matches and it is not a break date, exit the loop
+            break;
+        }
+
         releaseDateTime.setDate(releaseDateTime.getDate() + 1);
     }
 
@@ -226,6 +245,7 @@ function getNextReleaseDateTime(currentDate) {
 
     return releaseDateTime;
 }
+
 
 function isSameDate(date1, date2) {
     return (
